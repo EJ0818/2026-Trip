@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>清邁親友旅遊助理 - Zootopia Style</title>
+    <!-- 載入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 載入 Font Awesome 圖示 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- 載入 Google Font: Nunito (圓潤友好) -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* 設置全域字體為 Nunito */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f7f9; /* Zootopia 城市背景色，淺藍灰 */
+        }
+        /* 主容器樣式，限制寬度並置中，確保手機體驗 */
+        #app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            min-height: 100vh;
+            padding-bottom: 80px; /* 留出底部導航的空間 */
+        }
+        /* 隱藏未選中的分頁 */
+        .tab-content:not(.active) {
+            display: none;
+        }
+        /* 自定義捲軸樣式 (僅Chrome/Edge/Safari) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #90c74b; /* Zootopia 綠色 */
+            border-radius: 10px;
+        }
+        /* 讓 input[type="file"] 隱藏，使用按鈕觸發 */
+        .file-input-container {
+            display: inline-block;
+        }
+        .file-input-container input[type="file"] {
+            display: none;
+        }
+        /* 輔助函數：將 Base64 轉換為 Blob 的函式（用於圖片處理） */
+        /* Zootopia 綠色按鈕基礎樣式 */
+        .btn-zootopia-primary {
+            background-color: #90c74b; /* Nick's Green */
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 1.5rem; /* 更加圓潤 */
+            font-weight: 700;
+            box-shadow: 0 4px #6B8E23; /* 輕微陰影，增加立體感 */
+            transition: all 0.1s ease-in-out;
+        }
+        .btn-zootopia-primary:active {
+            box-shadow: 0 2px #6B8E23;
+            transform: translateY(2px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <div id="app-container" class="bg-white shadow-2xl">
+        
+        <!-- 頂部標題和問候語 -->
+        <header class="p-6 bg-[#4A90E2] text-white shadow-xl rounded-b-3xl mb-4">
+            <h1 class="text-3xl font-extrabold flex items-center">
+                <i class="fas fa-paw mr-2"></i> 清邁探索日誌
+            </h1>
+            <p class="text-sm opacity-90 mt-1">為親友打造的 Zootopia 風格旅遊小助手</p>
+        </header>
+
+        <!-- 內容區域 -->
+        <main class="px-4 py-2">
+
+            <!-- 1. PLAN (行程表) -->
+            <section id="plan" class="tab-content active">
+                <h2 class="text-2xl font-bold mb-4 text-[#4A90E2] border-b-2 border-[#90c74b] pb-2">
+                    <i class="fas fa-route mr-2"></i> 規劃行程表
+                </h2>
+                <div class="space-y-6" id="itinerary-container">
+                    <!-- 行程卡片將由 JS 填充 -->
+                </div>
+            </section>
+
+            <!-- 2. GUIDE (深度導覽) -->
+            <section id="guide" class="tab-content">
+                <h2 class="text-2xl font-bold mb-4 text-[#4A90E2] border-b-2 border-[#90c74b] pb-2">
+                    <i class="fas fa-map-marked-alt mr-2"></i> 深度導覽
+                </h2>
+
+                <div class="bg-white p-5 rounded-3xl shadow-lg mb-6 border-l-4 border-[#F7D754]">
+                    <h3 class="text-xl font-bold text-[#6B8E23] mb-3">🐘 Elephant Friend 住宿與體驗</h3>
+                    <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                        Elephant Friend 位於清邁郊區，提供一個與大象近距離接觸的友好環境。這裡不是傳統的觀光營地，而是專注於大象福祉的保護區。我們的「一日套裝行程」包含了溫和的大象洗澡與餵食，以及充滿自然氣息的竹筏漂流和瀑布野餐。對於家庭旅遊來說，這是一個難得的、富有教育意義的體驗。
+                    </p>
+                    <p class="text-sm font-semibold text-gray-500 mt-2">冷知識：成年大象每天需要攝取約 150 公斤的食物！</p>
+                    
+                    <h4 class="text-lg font-bold mt-4 mb-2">地圖導覽 (Elephant friend)</h4>
+                    <!-- OpenStreetMap iframe，使用大致的清邁北邊山區座標 -->
+                    <div class="aspect-w-16 aspect-h-9 overflow-hidden rounded-xl shadow-inner">
+                         <iframe width="100%" height="300" 
+                            src="https://www.openstreetmap.org/export/embed.html?bbox=98.80%2C18.87%2C98.90%2C18.97&amp;layer=mapnik&amp;marker=18.92%2C98.85" 
+                            style="border: 1px solid black; width: 100%; height: 100%;" allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-3xl shadow-lg mb-6 border-l-4 border-[#F7D754]">
+                    <h3 class="text-xl font-bold text-[#6B8E23] mb-3">🏮 清邁天燈節 (Yi Peng)</h3>
+                    <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                        天燈節是清邁最具代表性的活動之一，通常在泰國的十二月滿月舉行，也被稱為水燈節 (Loi Krathong)。當成千上萬的孔明燈同時升空，照亮夜空時，那份壯觀與浪漫令人難忘。我們的行程正好能參與其中，請務必準備好相機！
+                    </p>
+                    <p class="text-sm font-semibold text-gray-500 mt-2">注意事項：放天燈通常需要支付門票或場地費。請注意風向並遵守工作人員指示。</p>
+                </div>
+            </section>
+            
+            <!-- 3. WALLET (記帳與匯率) -->
+            <section id="wallet" class="tab-content">
+                <h2 class="text-2xl font-bold mb-4 text-[#4A90E2] border-b-2 border-[#90c74b] pb-2">
+                    <i class="fas fa-wallet mr-2"></i> 記帳與匯率
+                </h2>
+                
+                <!-- 匯率計算機 -->
+                <div class="bg-[#eaf1f7] p-4 rounded-2xl shadow-inner mb-6">
+                    <h3 class="text-xl font-bold text-[#4A90E2] mb-3">即時匯率換算</h3>
+                    <p class="text-xs text-gray-500 mb-2">匯率設定：1 THB (泰銖) ≈ 0.90 TWD (台幣)</p>
+                    <input type="text" id="calcInput" placeholder="輸入算式 (e.g., 500+200*3)" 
+                           class="w-full p-3 mb-3 border-2 border-[#90c74b] rounded-xl text-lg font-mono focus:ring-2 focus:ring-[#F7D754]">
+                    <button onclick="calculateCurrency()" class="btn-zootopia-primary w-full text-lg">
+                        <i class="fas fa-calculator mr-2"></i> 計算並換算 (TWD)
+                    </button>
+                    <div id="calcResult" class="mt-4 p-3 bg-white rounded-xl shadow-md text-center">
+                        <span class="text-sm text-gray-500">輸入算式後，點擊計算</span>
+                    </div>
+                </div>
+
+                <!-- 記帳功能 -->
+                <div class="bg-white p-4 rounded-2xl shadow-lg border-t-4 border-[#90c74b]">
+                    <h3 class="text-xl font-bold text-[#6B8E23] mb-3">新增消費記錄 (THB)</h3>
+                    <form id="expenseForm" class="space-y-3">
+                        <input type="text" id="expenseItem" placeholder="品項名稱 (e.g., 午餐)" required
+                               class="w-full p-3 border rounded-xl focus:border-[#4A90E2]">
+                        <input type="number" id="expenseAmount" placeholder="泰銖金額 (THB)" required
+                               class="w-full p-3 border rounded-xl focus:border-[#4A90E2]" min="0">
+                        
+                        <!-- 拍照/上傳按鈕 -->
+                        <div class="file-input-container">
+                            <label for="expensePhoto" class="btn-zootopia-primary cursor-pointer text-sm">
+                                <i class="fas fa-camera mr-2"></i> 拍照 / 上傳收據
+                            </label>
+                            <input type="file" id="expensePhoto" accept="image/*" capture="camera">
+                            <span id="photoStatus" class="ml-3 text-sm text-gray-500">未選取圖片</span>
+                            <canvas id="photoCanvas" style="display: none;"></canvas>
+                        </div>
+
+                        <button type="submit" class="btn-zootopia-primary w-full mt-3">
+                            <i class="fas fa-plus-circle mr-2"></i> 儲存記錄
+                        </button>
+                    </form>
+
+                    <!-- 記帳列表 -->
+                    <h3 class="text-xl font-bold text-[#4A90E2] mt-6 mb-3 border-t pt-4">消費歷史</h3>
+                    <div id="expenseList" class="space-y-4">
+                        <p class="text-center text-gray-400">尚無消費記錄。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. LISTS (清單) -->
+            <section id="lists" class="tab-content">
+                <h2 class="text-2xl font-bold mb-4 text-[#4A90E2] border-b-2 border-[#90c74b] pb-2">
+                    <i class="fas fa-list-check mr-2"></i> 清單與備忘錄
+                </h2>
+
+                <!-- 必備清單 CheckList -->
+                <div class="bg-white p-5 rounded-3xl shadow-lg mb-6 border-l-4 border-[#90c74b]">
+                    <h3 class="text-xl font-bold text-[#6B8E23] mb-3"><i class="fas fa-suitcase-rolling mr-2"></i> 行前準備 CheckList</h3>
+                    <div id="checklistContainer" class="space-y-2">
+                        <!-- Checklist items will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- 個人備忘錄 Memo -->
+                <div class="bg-white p-5 rounded-3xl shadow-lg border-l-4 border-[#F7D754]">
+                    <h3 class="text-xl font-bold text-[#4A90E2] mb-3"><i class="fas fa-lightbulb mr-2"></i> 個人備忘錄</h3>
+                    <textarea id="memoTextarea" 
+                              class="w-full p-3 border rounded-xl h-40 focus:border-[#4A90E2] resize-none" 
+                              placeholder="自由輸入文字，網址會自動轉換為按鈕..."></textarea>
+                    <button onclick="saveMemo()" class="btn-zootopia-primary w-full mt-3 text-sm">
+                        <i class="fas fa-save mr-2"></i> 儲存備忘錄
+                    </button>
+
+                    <div id="memoPreview" class="mt-4 p-3 bg-[#eaf1f7] rounded-xl text-sm whitespace-pre-wrap">
+                        <!-- Memo preview will be shown here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. INFO (資訊) -->
+            <section id="info" class="tab-content">
+                <h2 class="text-2xl font-bold mb-4 text-[#4A90E2] border-b-2 border-[#90c74b] pb-2">
+                    <i class="fas fa-circle-info mr-2"></i> 旅遊資訊與緊急聯絡
+                </h2>
+
+                <!-- 資訊卡片：天氣 -->
+                <div class="bg-white p-5 rounded-3xl shadow-lg mb-6 border-l-4 border-[#90c74b]">
+                    <h3 class="text-xl font-bold text-[#6B8E23] mb-3"><i class="fas fa-cloud-sun-rain mr-2"></i> 當地天氣</h3>
+                    <p class="text-sm mb-3">清邁 11 月底通常為涼季，氣候宜人，早晚溫差大，需備薄外套。</p>
+                    <a href="https://www.tmd.go.th/en" target="_blank" class="btn-zootopia-primary inline-block text-xs">
+                        查看泰國氣象局預報
+                    </a>
+                </div>
+
+                <!-- 資訊卡片：緊急聯絡 -->
+                <div class="bg-white p-5 rounded-3xl shadow-lg mb-6 border-l-4 border-[#F7D754]">
+                    <h3 class="text-xl font-bold text-[#4A90E2] mb-3"><i class="fas fa-phone-volume mr-2"></i> 緊急聯絡資訊</h3>
+                    <ul class="text-sm space-y-2">
+                        <li><span class="font-semibold">警察：</span> 191</li>
+                        <li><span class="font-semibold">救護車/火警：</span> 1669</li>
+                        <li><span class="font-semibold">旅遊警察 (英文)：</span> 1155</li>
+                        <li><span class="font-semibold">駐泰國台北經濟文化辦事處：</span> +66-81-666-4006</li>
+                    </ul>
+                </div>
+
+                <!-- 資訊卡片：旅遊禁忌 -->
+                <div class="bg-white p-5 rounded-3xl shadow-lg border-l-4 border-[#90c74b]">
+                    <h3 class="text-xl font-bold text-[#6B8E23] mb-3"><i class="fas fa-triangle-exclamation mr-2"></i> 旅遊禁忌與注意事項</h3>
+                    <ul class="text-sm list-disc pl-5 space-y-2">
+                        <li>請勿觸摸他人頭部 (視為身體最神聖的部位)。</li>
+                        <li>女性不可碰觸僧侶，即使是遞東西也要透過第三方。</li>
+                        <li>對國王和皇室保持尊敬，不要評論或做出不敬手勢。</li>
+                        <li>出入境禁帶肉製品、新鮮蔬果及特定藥品。</li>
+                    </ul>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- 底部導航列 -->
+        <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl z-50 rounded-t-3xl max-w-[600px] mx-auto">
+            <div class="flex justify-around items-center h-16">
+                <button onclick="switchTab('plan')" class="nav-btn flex flex-col items-center justify-center p-2 text-[#4A90E2]" data-tab="plan">
+                    <i class="fas fa-route text-xl"></i>
+                    <span class="text-xs mt-1 font-semibold">PLAN</span>
+                </button>
+                <button onclick="switchTab('guide')" class="nav-btn flex flex-col items-center justify-center p-2 text-gray-500" data-tab="guide">
+                    <i class="fas fa-map-marked-alt text-xl"></i>
+                    <span class="text-xs mt-1 font-semibold">GUIDE</span>
+                </button>
+                <button onclick="switchTab('wallet')" class="nav-btn flex flex-col items-center justify-center p-2 text-gray-500" data-tab="wallet">
+                    <i class="fas fa-wallet text-xl"></i>
+                    <span class="text-xs mt-1 font-semibold">WALLET</span>
+                </button>
+                <button onclick="switchTab('lists')" class="nav-btn flex flex-col items-center justify-center p-2 text-gray-500" data-tab="lists">
+                    <i class="fas fa-list-check text-xl"></i>
+                    <span class="text-xs mt-1 font-semibold">LISTS</span>
+                </button>
+                <button onclick="switchTab('info')" class="nav-btn flex flex-col items-center justify-center p-2 text-gray-500" data-tab="info">
+                    <i class="fas fa-circle-info text-xl"></i>
+                    <span class="text-xs mt-1 font-semibold">INFO</span>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- 圖片壓縮後的提示訊息 (非警示框) -->
+        <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 p-3 bg-gray-800 text-white rounded-xl shadow-2xl opacity-0 transition-opacity duration-300 pointer-events-none z-50">
+            訊息提示
+        </div>
+
+    </div>
+
+    <!-- JavaScript 邏輯 -->
+    <script>
+        // --- 全域常量與變數 ---
+        const APP_ID = 'zootopia-travel-cnxtpe-2026';
+        const STORAGE_KEY = {
+            CHECKLIST: `${APP_ID}-checklist`,
+            MEMO: `${APP_ID}-memo`,
+            EXPENSES: `${APP_ID}-expenses`,
+        };
+        const EXCHANGE_RATE_TWD_PER_THB = 0.90; // 1 THB = 0.90 TWD
+        
+        let expenses = []; // 儲存記帳資料
+
+        // --- 旅遊行程資料 (硬編碼) ---
+        const TRAVEL_DATA = {
+            flights: [
+                { id: 'out', date: '2026/11/21', flight: 'CI851', from: 'TPE (桃園機場)', to: 'CNX (清邁機場)', time: '10:30 抵達' },
+                { id: 'return', date: '2026/11/25', flight: 'CI852', from: 'CNX (清邁機場)', to: 'TPE (桃園機場)', time: '回程' }
+            ],
+            accommodations: [
+                { date: '11/21 - 11/23', name: '🐘 Elephant friend', notes: '山區住宿，親近大象，注意防蚊' },
+                { date: '11/23 - 11/25', name: 'เชียงใหม่ตำบล ท่าศาลา', notes: '市區住宿，方便逛街與夜市' }
+            ],
+            checklist: [
+                { category: '成人', item: '護照', checked: false },
+                { category: '成人', item: '網卡', checked: false },
+                { category: '成人', item: '入境申請表/電子簽證', checked: false },
+                { category: '成人', item: '錢包', checked: false },
+                { category: '成人', item: '足夠現金 (THB)', checked: false },
+                { category: '成人', item: '換洗衣物', checked: false },
+                { category: '成人', item: '化妝盥洗用品', checked: false },
+                { category: '成人', item: '變壓器/轉接頭', checked: false },
+                { category: '寶寶', item: '奶瓶', checked: false },
+                { category: '寶寶', item: '奶粉', checked: false },
+                { category: '寶寶', item: '備用藥', checked: false },
+                { category: '寶寶', item: '尿布', checked: false },
+                { category: '寶寶', item: '濕紙巾', checked: false }
+            ],
+            itinerary: [
+                { day: 1, date: '11/21 (六)', events: [
+                    { time: '6:00', item: '出發: 桃園機場', notes: 'CI851', type: 'flight' },
+                    { time: '10:30', item: '抵達: 清邁機場', notes: '取行李 & 辦理網卡', type: 'event' },
+                    { time: '11:00', item: '取車: 清邁機場', notes: '自駕前往第一站', type: 'event' },
+                    { time: '12:00', item: '午餐：Goodsouls Kitchen', notes: '素食/輕食', type: 'food', link: 'Goodsouls Kitchen, Chiang Mai' },
+                    { time: '14:00', item: '採買補給品: Rimping Supermarket (Maya)', notes: '採買零食飲用水', type: 'shop', link: 'Rimping Supermarket Maya' },
+                    { time: '16:00', item: 'Check in: Elephant friend', notes: '山區住宿', type: 'stay' }
+                ]},
+                { day: 2, date: '11/22 (日)', events: [
+                    { time: '8:00', item: '早餐: Elephant morning call', notes: '山區陽光早餐', type: 'food' },
+                    { time: '10:00', item: '一日套裝行程', notes: '大象洗澡 + 竹筏漂流 + 瀑布野餐', type: 'activity' },
+                    { time: '18:00', item: '晚餐：付費晚餐', notes: '住宿地解決，休息放鬆', type: 'food' }
+                ]},
+                { day: 3, date: '11/23 (一)', events: [
+                    { time: '8:00', item: '早餐 & Check out', notes: '準備離開山區', type: 'stay' },
+                    { time: '11:00', item: '採買補給品: Rimping Supermarket (Maya)', notes: '再次採買', type: 'shop', link: 'Rimping Supermarket Maya' },
+                    { time: '13:00', item: '午餐: Free Bird Cafe', notes: '公益素食咖啡廳', type: 'food', link: 'Free Bird Cafe, Chiang Mai' },
+                    { time: '14:00', item: 'Check in: เชียงใหม่ตำบล ท่าศาลา', notes: '市區住宿', type: 'stay' },
+                    { time: '15:00', item: '分組行動', notes: '叢林飛索/清邁夜間動物園 (擇一)', type: 'activity' },
+                    { time: '18:00', item: '晚餐: 長康路夜市', notes: '享受熱鬧市集小吃', type: 'food', link: 'Chiang Mai Night Bazaar' },
+                    { time: '20:00', item: '按摩: Lila 麗菈女子監獄泰式按摩', notes: '需預約', type: 'activity', link: 'Lila Thai Massage' }
+                ]},
+                { day: 4, date: '11/24 (二)', events: [
+                    { time: '8:00', item: '早餐: villa內自煮', notes: '享受悠閒時光', type: 'food' },
+                    { time: '10:00', item: '逛真心市集 or 買伴手禮', notes: '市區活動', type: 'shop' },
+                    { time: '12:00', item: '午餐: Aum Vegetarian Restaurant', notes: '泰式素食料理', type: 'food', link: 'Aum Vegetarian Restaurant' },
+                    { time: '14:00', item: '逛天燈節: Yi Peng Lantern Festival', notes: '準備觀賞天燈', type: 'activity' }
+                ]},
+                { day: 5, date: '11/25 (三)', events: [
+                    { time: '8:00', item: '回程: 清邁機場', notes: 'CI852', type: 'flight' }
+                ]}
+            ]
+        };
+
+        // --- 核心工具函式 ---
+
+        /**
+         * 顯示 Toast 提示訊息
+         * @param {string} message 
+         */
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 3000);
+        }
+
+        /**
+         * 切換分頁
+         * @param {string} tabId 要切換到的分頁 ID
+         */
+        function switchTab(tabId) {
+            // 隱藏所有內容
+            document.querySelectorAll('.tab-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            // 顯示目標內容
+            document.getElementById(tabId).classList.add('active');
+
+            // 更新導航列樣式
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                const isCurrent = btn.getAttribute('data-tab') === tabId;
+                btn.classList.toggle('text-[#4A90E2]', isCurrent);
+                btn.classList.toggle('text-gray-500', !isCurrent);
+                btn.classList.toggle('font-bold', isCurrent);
+                btn.classList.toggle('bg-blue-50', isCurrent);
+            });
+            window.scrollTo(0, 0); // 切換時滾動到頂部
+        }
+
+        /**
+         * 儲存資料到 LocalStorage
+         * @param {string} key 
+         * @param {any} data 
+         */
+        function saveToStorage(key, data) {
+            try {
+                localStorage.setItem(key, JSON.stringify(data));
+            } catch (error) {
+                console.error("Error saving to localStorage:", key, error);
+            }
+        }
+
+        /**
+         * 從 LocalStorage 載入資料
+         * @param {string} key 
+         * @param {any} defaultValue 
+         * @returns {any}
+         */
+        function loadFromStorage(key, defaultValue) {
+            try {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : defaultValue;
+            } catch (error) {
+                console.error("Error loading from localStorage:", key, error);
+                return defaultValue;
+            }
+        }
+
+        // --- 1. PLAN 模組邏輯 ---
+
+        /**
+         * 取得對應行程類型的圖示
+         * @param {string} type 
+         * @returns {string} Tailwind 顏色 class
+         */
+        function getTypeIcon(type) {
+            switch(type) {
+                case 'flight': return { icon: 'plane-departure', color: 'text-indigo-500' };
+                case 'food': return { icon: 'utensils', color: 'text-orange-500' };
+                case 'shop': return { icon: 'basket-shopping', color: 'text-green-500' };
+                case 'stay': return { icon: 'house-chimney', color: 'text-blue-500' };
+                case 'activity': return { icon: 'person-hiking', color: 'text-red-500' };
+                default: return { icon: 'circle', color: 'text-gray-400' };
+            }
+        }
+
+        /**
+         * 渲染行程表
+         */
+        function renderItinerary() {
+            const container = document.getElementById('itinerary-container');
+            let html = `
+                <div class="bg-gray-100 p-4 rounded-2xl shadow-inner text-center mb-6">
+                    <p class="font-bold text-lg text-[#4A90E2]">🛫 航班資訊 & 🏠 住宿資訊</p>
+                    <p class="text-sm mt-1">去程: ${TRAVEL_DATA.flights[0].date} ${TRAVEL_DATA.flights[0].flight} ${TRAVEL_DATA.flights[0].from} → ${TRAVEL_DATA.flights[0].to}</p>
+                    <p class="text-sm">回程: ${TRAVEL_DATA.flights[1].date} ${TRAVEL_DATA.flights[1].flight} ${TRAVEL_DATA.flights[1].from} → ${TRAVEL_DATA.flights[1].to}</p>
+                    <p class="text-sm mt-2 font-semibold">住宿: ${TRAVEL_DATA.accommodations.map(a => `${a.date} (${a.name})`).join(' | ')}</p>
+                </div>
+            `;
+
+            TRAVEL_DATA.itinerary.forEach(dayPlan => {
+                html += `
+                    <div class="mb-8 p-4 bg-white rounded-3xl shadow-xl border-t-8 border-[#90c74b]">
+                        <h3 class="text-xl font-extrabold text-[#6B8E23] mb-4">${dayPlan.date} (Day ${dayPlan.day})</h3>
+                        <div class="relative pl-6">
+                            <div class="absolute top-0 left-0 bottom-0 w-1 bg-gray-200 rounded-full"></div>
+                            ${dayPlan.events.map(event => {
+                                const { icon, color } = getTypeIcon(event.type);
+                                return `
+                                    <div class="relative mb-6">
+                                        <div class="absolute -left-3 top-0 w-6 h-6 rounded-full ${color} flex items-center justify-center shadow-md">
+                                            <i class="fas fa-${icon} text-white text-xs"></i>
+                                        </div>
+                                        <div class="ml-4 pt-1">
+                                            <p class="text-sm font-bold text-gray-700">${event.time}</p>
+                                            <p class="text-lg font-extrabold text-[#4A90E2]">${event.item}</p>
+                                            <p class="text-sm text-gray-500">${event.notes}</p>
+                                            ${event.link ? `
+                                                <div class="mt-2 space-x-2">
+                                                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.link)}" target="_blank" class="text-xs text-white bg-red-500 hover:bg-red-600 rounded-full px-3 py-1 shadow-md">
+                                                        <i class="fas fa-location-dot mr-1"></i> Google Maps
+                                                    </a>
+                                                    <a href="https://www.google.com/search?q=${encodeURIComponent(event.link + ' 食記')}" target="_blank" class="text-xs text-white bg-orange-400 hover:bg-orange-500 rounded-full px-3 py-1 shadow-md">
+                                                        <i class="fas fa-book-open-reader mr-1"></i> 查看食記
+                                                    </a>
+                                                </div>
+                                            ` : ''}
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // --- 3. WALLET 模組邏輯 ---
+
+        /**
+         * 匯率計算機邏輯
+         */
+        function calculateCurrency() {
+            const input = document.getElementById('calcInput').value;
+            const resultDiv = document.getElementById('calcResult');
+            
+            if (!input) {
+                resultDiv.innerHTML = `<span class="text-red-500 font-bold">請輸入算式！</span>`;
+                return;
+            }
+
+            try {
+                // 安全地執行算式
+                const amountTHB = Function('return ' + input)();
+
+                if (isNaN(amountTHB) || amountTHB === null) {
+                    throw new Error("Invalid calculation");
+                }
+
+                const amountTWD = (amountTHB * EXCHANGE_RATE_TWD_PER_THB).toFixed(2);
+                
+                resultDiv.innerHTML = `
+                    <div class="font-extrabold text-2xl text-[#6B8E23]">${amountTHB.toFixed(2)} THB</div>
+                    <div class="text-sm text-gray-500 mt-1">=</div>
+                    <div class="font-extrabold text-2xl text-[#4A90E2]">${amountTWD} TWD</div>
+                `;
+
+            } catch (e) {
+                resultDiv.innerHTML = `<span class="text-red-500 font-bold">算式錯誤或結果無效！</span>`;
+                console.error("Calculation error:", e);
+            }
+        }
+
+        /**
+         * 壓縮並轉換圖片為 Base64 縮圖 (Canvas)
+         * @param {File} file 
+         * @returns {Promise<string>} Base64 圖片資料
+         */
+        function compressImage(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 200; // 縮圖最大寬度
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > MAX_WIDTH) {
+                            height = height * (MAX_WIDTH / width);
+                            width = MAX_WIDTH;
+                        }
+                        
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        // 轉換為 Base64 (JPEG, 壓縮品質 70%)
+                        resolve(canvas.toDataURL('image/jpeg', 0.7));
+                    };
+                    img.onerror = reject;
+                    img.src = event.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        /**
+         * 處理記帳表單提交
+         * @param {Event} e 
+         */
+        async function handleExpenseSubmit(e) {
+            e.preventDefault();
+
+            const item = document.getElementById('expenseItem').value.trim();
+            const amountTHB = parseFloat(document.getElementById('expenseAmount').value);
+            const photoFile = document.getElementById('expensePhoto').files[0];
+
+            if (item === "" || isNaN(amountTHB) || amountTHB <= 0) {
+                showToast("請輸入有效的品項名稱和金額！");
+                return;
+            }
+
+            let photoBase64 = null;
+            if (photoFile) {
+                showToast("正在處理圖片，請稍候...");
+                try {
+                    photoBase64 = await compressImage(photoFile);
+                    showToast("圖片處理完成！");
+                } catch (error) {
+                    console.error("Image processing failed:", error);
+                    showToast("圖片處理失敗，記錄已儲存但無圖片。");
+                }
+            }
+
+            const newExpense = {
+                id: Date.now(),
+                item,
+                amountTHB: amountTHB.toFixed(2),
+                amountTWD: (amountTHB * EXCHANGE_RATE_TWD_PER_THB).toFixed(2),
+                photoBase64,
+                timestamp: new Date().toLocaleString('zh-TW', { hour12: false })
+            };
+
+            expenses.push(newExpense);
+            saveToStorage(STORAGE_KEY.EXPENSES, expenses);
+            renderExpenseList();
+
+            // 重設表單
+            e.target.reset();
+            document.getElementById('photoStatus').textContent = '未選取圖片';
+        }
+
+        /**
+         * 渲染記帳列表
+         */
+        function renderExpenseList() {
+            const listContainer = document.getElementById('expenseList');
+            let totalTHB = 0;
+            let totalTWD = 0;
+
+            if (expenses.length === 0) {
+                listContainer.innerHTML = `<p class="text-center text-gray-400 p-4">尚無消費記錄。</p>`;
+                return;
+            }
+
+            const listHTML = expenses.reverse().map(exp => {
+                totalTHB += parseFloat(exp.amountTHB);
+                totalTWD += parseFloat(exp.amountTWD);
+
+                return `
+                    <div class="flex items-center bg-gray-50 p-3 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        ${exp.photoBase64 ? `
+                            <img src="${exp.photoBase64}" class="w-12 h-12 object-cover rounded-lg mr-3 shadow-md border-2 border-[#F7D754] flex-shrink-0" alt="收據縮圖">
+                        ` : `
+                            <div class="w-12 h-12 bg-gray-300 rounded-lg mr-3 flex items-center justify-center text-gray-500 flex-shrink-0">
+                                <i class="fas fa-image text-xl"></i>
+                            </div>
+                        `}
+                        <div class="flex-grow min-w-0">
+                            <p class="font-bold text-gray-800 truncate">${exp.item}</p>
+                            <p class="text-xs text-gray-400">${exp.timestamp}</p>
+                        </div>
+                        <div class="text-right ml-4 flex-shrink-0">
+                            <p class="font-extrabold text-[#6B8E23] text-lg">${exp.amountTHB} THB</p>
+                            <p class="text-sm text-[#4A90E2] font-semibold">≈ ${exp.amountTWD} TWD</p>
+                        </div>
+                        <button onclick="deleteExpense(${exp.id})" class="ml-3 text-red-400 hover:text-red-600 transition-colors flex-shrink-0">
+                            <i class="fas fa-trash-alt text-sm"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            listContainer.innerHTML = listHTML;
+
+            // 總計顯示在列表上方
+            listContainer.insertAdjacentHTML('beforebegin', `
+                <div id="expenseTotal" class="p-3 mb-4 bg-[#F7D754] text-gray-800 rounded-xl shadow-md font-extrabold text-center">
+                    <p class="text-sm">總計消費:</p>
+                    <p class="text-xl">${totalTHB.toFixed(2)} THB ≈ ${totalTWD.toFixed(2)} TWD</p>
+                </div>
+            `);
+            
+            // 移除舊的總計以防重複
+            const oldTotal = document.getElementById('expenseTotal');
+            if (oldTotal) oldTotal.remove();
+        }
+
+        /**
+         * 刪除單筆記帳記錄
+         * @param {number} id 
+         */
+        function deleteExpense(id) {
+            expenses = expenses.filter(exp => exp.id !== id);
+            saveToStorage(STORAGE_KEY.EXPENSES, expenses);
+            renderExpenseList();
+            showToast("記錄已刪除。");
+        }
+        
+        // 監聽圖片選擇事件，更新狀態文字
+        document.addEventListener('DOMContentLoaded', () => {
+            const photoInput = document.getElementById('expensePhoto');
+            if(photoInput) {
+                photoInput.addEventListener('change', () => {
+                    const status = document.getElementById('photoStatus');
+                    if (photoInput.files.length > 0) {
+                        status.textContent = `已選取: ${photoInput.files[0].name}`;
+                    } else {
+                        status.textContent = '未選取圖片';
+                    }
+                });
+            }
+        });
+
+        // --- 4. LISTS 模組邏輯 ---
+
+        /**
+         * 渲染並初始化 CheckList
+         */
+        function renderChecklist() {
+            let listData = loadFromStorage(STORAGE_KEY.CHECKLIST, TRAVEL_DATA.checklist);
+            const container = document.getElementById('checklistContainer');
+            let html = '';
+            
+            let currentCategory = '';
+            listData.forEach((item, index) => {
+                if (item.category !== currentCategory) {
+                    html += `<h4 class="text-lg font-bold text-gray-600 mt-3 mb-1">${item.category} 清單</h4>`;
+                    currentCategory = item.category;
+                }
+                html += `
+                    <label class="flex items-center p-2 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                        <input type="checkbox" data-index="${index}" ${item.checked ? 'checked' : ''} 
+                               onchange="toggleChecklistItem(${index})" 
+                               class="form-checkbox h-5 w-5 text-[#90c74b] rounded border-gray-300 focus:ring-[#90c74b]">
+                        <span class="ml-3 text-base text-gray-700 ${item.checked ? 'line-through text-gray-400' : ''}">${item.item}</span>
+                    </label>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        /**
+         * 切換 CheckList 狀態並儲存
+         * @param {number} index 
+         */
+        function toggleChecklistItem(index) {
+            let listData = loadFromStorage(STORAGE_KEY.CHECKLIST, TRAVEL_DATA.checklist);
+            listData[index].checked = !listData[index].checked;
+            saveToStorage(STORAGE_KEY.CHECKLIST, listData);
+            renderChecklist(); // 重新渲染以更新樣式
+        }
+
+        /**
+         * 儲存備忘錄
+         */
+        function saveMemo() {
+            const textarea = document.getElementById('memoTextarea');
+            const text = textarea.value;
+            saveToStorage(STORAGE_KEY.MEMO, text);
+            renderMemoPreview(text);
+            showToast("備忘錄已儲存！");
+        }
+
+        /**
+         * 渲染備忘錄預覽並轉換網址
+         * @param {string} text 
+         */
+        function renderMemoPreview(text) {
+            const previewDiv = document.getElementById('memoPreview');
+            // 正則表達式匹配 URL
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            
+            // 將純文字內容分行處理，並將 URL 替換為按鈕
+            const processedText = text.replace(urlRegex, (url) => {
+                return `<a href="${url}" target="_blank" class="inline-block mt-1 text-xs text-white bg-[#4A90E2] hover:bg-[#3d7bd4] rounded-full px-3 py-1 shadow-md">
+                            <i class="fas fa-link mr-1"></i> ${url.length > 30 ? url.substring(0, 30) + '...' : url}
+                        </a>`;
+            });
+            
+            previewDiv.innerHTML = processedText || '<p class="text-center text-gray-400">尚無備忘錄內容。</p>';
+        }
+
+        /**
+         * 從 LocalStorage 載入備忘錄
+         */
+        function loadMemo() {
+            const text = loadFromStorage(STORAGE_KEY.MEMO, '');
+            document.getElementById('memoTextarea').value = text;
+            renderMemoPreview(text);
+        }
+
+        // --- 初始化全部功能 ---
+
+        window.onload = function() {
+            // 1. 確保第一個分頁啟動
+            switchTab('plan'); 
+
+            // 2. 渲染 PLAN 模組
+            renderItinerary();
+
+            // 3. 初始化 WALLET 模組
+            expenses = loadFromStorage(STORAGE_KEY.EXPENSES, []);
+            renderExpenseList();
+            document.getElementById('expenseForm').addEventListener('submit', handleExpenseSubmit);
+
+            // 4. 初始化 LISTS 模組
+            renderChecklist();
+            loadMemo();
+        };
+
+        
+    </script>
+</body>
+</html>
