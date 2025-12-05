@@ -62,7 +62,7 @@
 <body class="bg-gray-50">
 
     <div id="app-container" class="bg-white shadow-2xl">
-        
+
         <!-- 頂部標題和問候語 -->
         <header class="p-6 bg-[#4A90E2] text-white shadow-xl rounded-b-3xl mb-4">
             <h1 class="text-3xl font-extrabold flex items-center">
@@ -96,7 +96,7 @@
                         Elephant Friend 位於清邁郊區，提供一個與大象近距離接觸的友好環境。這裡不是傳統的觀光營地，而是專注於大象福祉的保護區。我們的「一日套裝行程」包含了溫和的大象洗澡與餵食，以及充滿自然氣息的竹筏漂流和瀑布野餐。對於家庭旅遊來說，這是一個難得的、富有教育意義的體驗。
                     </p>
                     <p class="text-sm font-semibold text-gray-500 mt-2">冷知識：成年大象每天需要攝取約 150 公斤的食物！</p>
-                    
+
                     <h4 class="text-lg font-bold mt-4 mb-2">地圖導覽 (Elephant friend)</h4>
                     <!-- OpenStreetMap iframe，使用大致的清邁北邊山區座標 -->
                     <div class="aspect-w-16 aspect-h-9 overflow-hidden rounded-xl shadow-inner">
@@ -115,13 +115,13 @@
                     <p class="text-sm font-semibold text-gray-500 mt-2">注意事項：放天燈通常需要支付門票或場地費。請注意風向並遵守工作人員指示。</p>
                 </div>
             </section>
-            
+
             <!-- 3. WALLET (記帳與匯率) -->
             <section id="wallet" class="tab-content">
                 <h2 class="text-2xl font-bold mb-4 text-[#4A90E2] border-b-2 border-[#90c74b] pb-2">
                     <i class="fas fa-wallet mr-2"></i> 記帳與匯率
                 </h2>
-                
+
                 <!-- 匯率計算機 -->
                 <div class="bg-[#eaf1f7] p-4 rounded-2xl shadow-inner mb-6">
                     <h3 class="text-xl font-bold text-[#4A90E2] mb-3">即時匯率換算</h3>
@@ -144,7 +144,7 @@
                                class="w-full p-3 border rounded-xl focus:border-[#4A90E2]">
                         <input type="number" id="expenseAmount" placeholder="泰銖金額 (THB)" required
                                class="w-full p-3 border rounded-xl focus:border-[#4A90E2]" min="0">
-                        
+
                         <!-- 拍照/上傳按鈕 -->
                         <div class="file-input-container">
                             <label for="expensePhoto" class="btn-zootopia-primary cursor-pointer text-sm">
@@ -263,7 +263,7 @@
                 </button>
             </div>
         </nav>
-        
+
         <!-- 圖片壓縮後的提示訊息 (非警示框) -->
         <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 p-3 bg-gray-800 text-white rounded-xl shadow-2xl opacity-0 transition-opacity duration-300 pointer-events-none z-50">
             訊息提示
@@ -281,7 +281,7 @@
             EXPENSES: `${APP_ID}-expenses`,
         };
         const EXCHANGE_RATE_TWD_PER_THB = 0.90; // 1 THB = 0.90 TWD
-        
+
         let expenses = []; // 儲存記帳資料
 
         // --- 旅遊行程資料 (硬編碼) ---
@@ -295,36 +295,27 @@
                 { date: '11/23 - 11/25', name: 'เชียงใหม่ตำบล ท่าศาลา', notes: '市區住宿，方便逛街與夜市' }
             ],
             checklist: [
-                { category: '成人', item: '隨身包包: 小衛生紙,行充,錢包,水', checked: false },
-                { category: '成人', item: '護照', checked: false },
-                { category: '成人', item: '充電線', checked: false },
-                { category: '成人', item: '變壓器/轉接頭', checked: false },
+                { category: '成人', item: '隨身小包：護照,錢包,行充,水', checked: false },
                 { category: '成人', item: '網卡', checked: false },
                 { category: '成人', item: '入境申請表/電子簽證', checked: false },
                 { category: '成人', item: '足夠現金 (THB)', checked: false },
-                { category: '成人', item: '換洗衣物*5套,睡衣*1套', checked: false },
-                { category: '成人', item: '化妝盥洗用品(牙刷,牙膏,洗卸面乳)', checked: false },
-                { category: '成人', item: '拖鞋', checked: false },
-                { category: '成人', item: '髮圈,梳子,吹風機', checked: false },
-                { category: '成人', item: '備用藥(發燒.止痛,胃藥)', checked: false },
-                { category: '寶寶', item: '隨身包: 濕紙巾,尿布,防蚊液,防曬,麵包,水,酒精', checked: false },
-                { category: '寶寶', item: '推車,背巾, 電風扇', checked: false },
-                { category: '寶寶', item: '衣服*6套,睡衣*1套', checked: false },
-                { category: '寶寶', item: '抱抱羊', checked: false },
-                { category: '寶寶', item: '牙刷牙膏沐浴乳', checked: false },
-                { category: '寶寶', item: '浴巾', checked: false },
-                { category: '寶寶', item: '尿布*6天份', checked: false },
+                { category: '成人', item: '換洗衣物＊5套, 睡衣＊1套', checked: false },
+                { category: '成人', item: '化妝盥洗用品', checked: false },
+                { category: '成人', item: '變壓器/轉接頭', checked: false },
                 { category: '寶寶', item: '奶瓶', checked: false },
                 { category: '寶寶', item: '奶粉', checked: false },
-                { category: '寶寶', item: '備用藥(退燒,體溫計,蚊子藥,B5', checked: false },
+                { category: '寶寶', item: '備用藥', checked: false },
                 { category: '寶寶', item: '尿布', checked: false },
-                { category: '寶寶', item: '濕紙巾*2', checked: false }
-                { category: '寶寶', item: '拖鞋', checked: false }
-                { category: '寶寶', item: '少量玩具', checked: false }
-        
+                { category: '寶寶', item: '濕紙巾', checked: false }
             ],
             itinerary: [
                 { day: 1, date: '11/21 (六)', events: [
+                    { time: '6:00', item: '出發: 桃園機場', notes: 'CI851', type: 'flight' },
+                    { time: '10:30', item: '抵達: 清邁機場', notes: '取行李 & 辦理網卡', type: 'event' },
+                    { time: '11:00', item: '取車: 清邁機場', notes: '自駕前往第一站', type: 'event' },
+                    { time: '12:00', item: '午餐：Goodsouls Kitchen', notes: '素食/輕食', type: 'food', link: 'Goodsouls Kitchen, Chiang Mai' },
+                    { time: '14:00', item: '採買補給品: Rimping Supermarket (Maya)', notes: '採買零食飲用水', type: 'shop', link: 'Rimping Supermarket Maya' },
+                    { time: '16:00', item: 'Check in: Elephant friend', notes: '山區住宿', type: 'stay' }
                     { time: '6:00', item: '出發: 桃園機場', notes: '華航CI851，7:20起飛，推車機邊託運', type: 'flight' },
                     { time: '10:25', item: '抵達: 清邁機場', notes: '取推車與行李', type: 'event' },
                     { time: '11:00', item: '取車: 清邁機場', notes: '取車地點TBD', type: 'event' },
@@ -333,26 +324,37 @@
                     { time: '16:00', item: 'Check in: Elephant friend', notes: '山區住宿，天黑前抵達', type: 'stay' }
                 ]},
                 { day: 2, date: '11/22 (日)', events: [
+                    { time: '8:00', item: '早餐: Elephant morning call', notes: '山區陽光早餐', type: 'food' },
                     { time: '8:00', item: '早餐: Elephant morning call', notes: '山區陽光早餐免費，morning call需預約', type: 'food' },
                     { time: '10:00', item: '一日套裝行程', notes: '大象洗澡 + 竹筏漂流 + 瀑布野餐', type: 'activity' },
+                    { time: '18:00', item: '晚餐：付費晚餐', notes: '住宿地解決，休息放鬆', type: 'food' }
                     { time: '18:00', item: '晚餐：付費晚餐', notes: '晚一點有酒吧，休息放鬆~', type: 'food' }
                 ]},
                 { day: 3, date: '11/23 (一)', events: [
+                    { time: '8:00', item: '早餐 & Check out', notes: '準備離開山區', type: 'stay' },
+                    { time: '11:00', item: '採買補給品: Rimping Supermarket (Maya)', notes: '再次採買', type: 'shop', link: 'Rimping Supermarket Maya' },
+                    { time: '13:00', item: '午餐: Free Bird Cafe', notes: '公益素食咖啡廳', type: 'food', link: 'Free Bird Cafe, Chiang Mai' },
                     { time: '8:00', item: '早餐 & Check out', notes: '10點左右離開山區', type: 'stay' },
                     { time: '11:00', item: '採買補給品: Rimping Supermarket (Maya)', notes: '再次採買for villa自煮/零食', type: 'shop', link: 'Rimping Supermarket Maya' },
                     { time: '13:00', item: '午餐: Free Bird Cafe', notes: '素食緬泰料理，協助緬甸難民的社會企業', type: 'food', link: 'Free Bird Cafe, Chiang Mai' },
                     { time: '14:00', item: 'Check in: เชียงใหม่ตำบล ท่าศาลา', notes: '市區住宿', type: 'stay' },
                     { time: '15:00', item: '分組行動', notes: '叢林飛索/清邁夜間動物園 (擇一)', type: 'activity' },
+                    { time: '18:00', item: '晚餐: 長康路夜市', notes: '享受熱鬧市集小吃', type: 'food', link: 'Chiang Mai Night Bazaar' },
+                    { time: '20:00', item: '按摩: Lila 麗菈女子監獄泰式按摩', notes: '需預約', type: 'activity', link: 'Lila Thai Massage' }
                     { time: '18:00', item: '晚餐: 長康路夜市', notes: '享受當地夜市小吃', type: 'food', link: 'Chiang Mai Night Bazaar' },
                     { time: '20:00', item: '按摩: Lila 麗菈女子監獄泰式按摩', notes: '可於kkday/klook提前預約較便宜', type: 'activity', link: 'Lila Thai Massage' }
                 ]},
                 { day: 4, date: '11/24 (二)', events: [
                     { time: '8:00', item: '早餐: villa內自煮', notes: '享受悠閒時光', type: 'food' },
+                    { time: '10:00', item: '逛真心市集 or 買伴手禮', notes: '市區活動', type: 'shop' },
+                    { time: '12:00', item: '午餐: Aum Vegetarian Restaurant', notes: '泰式素食料理', type: 'food', link: 'Aum Vegetarian Restaurant' },
+                    { time: '14:00', item: '逛天燈節: Yi Peng Lantern Festival', notes: '準備觀賞天燈', type: 'activity' }
                     { time: '10:00', item: '逛真心市集 or 買伴手禮', notes: '買買買買買', type: 'shop' },
                     { time: '12:00', item: '午餐: Aum Vegetarian Restaurant', notes: '泰式素食料理，這家主廚本來要在他們國家摘星米其林的。口味超級獨特，用了非常多的鷹嘴豆，全部都是生平第一次吃到的口味。', type: 'food', link: 'Aum Vegetarian Restaurant' },
                     { time: '14:00', item: '逛天燈節: Yi Peng Lantern Festival', notes: '準備觀賞天燈，建議叫車自行前往', type: 'activity' }
                 ]},
                 { day: 5, date: '11/25 (三)', events: [
+                    { time: '8:00', item: '回程: 清邁機場', notes: 'CI852', type: 'flight' }
                     { time: '8:00', item: '回程: 清邁機場', notes: '華航CI852，11:25起飛，推車機邊託運', type: 'flight' }
                 ]}
             ]
@@ -503,7 +505,7 @@
         function calculateCurrency() {
             const input = document.getElementById('calcInput').value;
             const resultDiv = document.getElementById('calcResult');
-            
+
             if (!input) {
                 resultDiv.innerHTML = `<span class="text-red-500 font-bold">請輸入算式！</span>`;
                 return;
@@ -518,7 +520,7 @@
                 }
 
                 const amountTWD = (amountTHB * EXCHANGE_RATE_TWD_PER_THB).toFixed(2);
-                
+
                 resultDiv.innerHTML = `
                     <div class="font-extrabold text-2xl text-[#6B8E23]">${amountTHB.toFixed(2)} THB</div>
                     <div class="text-sm text-gray-500 mt-1">=</div>
@@ -551,12 +553,12 @@
                             height = height * (MAX_WIDTH / width);
                             width = MAX_WIDTH;
                         }
-                        
+
                         canvas.width = width;
                         canvas.height = height;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
-                        
+
                         // 轉換為 Base64 (JPEG, 壓縮品質 70%)
                         resolve(canvas.toDataURL('image/jpeg', 0.7));
                     };
@@ -664,7 +666,7 @@
                     <p class="text-xl">${totalTHB.toFixed(2)} THB ≈ ${totalTWD.toFixed(2)} TWD</p>
                 </div>
             `);
-            
+
             // 移除舊的總計以防重複
             const oldTotal = document.getElementById('expenseTotal');
             if (oldTotal) oldTotal.remove();
@@ -680,7 +682,7 @@
             renderExpenseList();
             showToast("記錄已刪除。");
         }
-        
+
         // 監聽圖片選擇事件，更新狀態文字
         document.addEventListener('DOMContentLoaded', () => {
             const photoInput = document.getElementById('expensePhoto');
@@ -705,7 +707,7 @@
             let listData = loadFromStorage(STORAGE_KEY.CHECKLIST, TRAVEL_DATA.checklist);
             const container = document.getElementById('checklistContainer');
             let html = '';
-            
+
             let currentCategory = '';
             listData.forEach((item, index) => {
                 if (item.category !== currentCategory) {
@@ -754,14 +756,14 @@
             const previewDiv = document.getElementById('memoPreview');
             // 正則表達式匹配 URL
             const urlRegex = /(https?:\/\/[^\s]+)/g;
-            
+
             // 將純文字內容分行處理，並將 URL 替換為按鈕
             const processedText = text.replace(urlRegex, (url) => {
                 return `<a href="${url}" target="_blank" class="inline-block mt-1 text-xs text-white bg-[#4A90E2] hover:bg-[#3d7bd4] rounded-full px-3 py-1 shadow-md">
                             <i class="fas fa-link mr-1"></i> ${url.length > 30 ? url.substring(0, 30) + '...' : url}
                         </a>`;
             });
-            
+
             previewDiv.innerHTML = processedText || '<p class="text-center text-gray-400">尚無備忘錄內容。</p>';
         }
 
@@ -793,7 +795,7 @@
             loadMemo();
         };
 
-        
+
     </script>
 </body>
 </html>
